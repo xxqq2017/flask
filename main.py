@@ -26,8 +26,8 @@ movies = [
     {'title': 'Swallowtail Butterfly', 'year': '1996','editor':'ptell'},
     {'title': 'King of Comedy', 'year': '1999','editor':'xiangm'},
     {'title': 'Devils on the Doorstep', 'year': '1999','editor':'huaqiang'},
-    {'title': 'WALL-E', 'year': '2008','editor':'liujing'},
-    {'title': 'The Pork of Music', 'year': '2012','editor':'张艺'},
+    {'title': 'WALL-E', 'year': '2008','editor':'巩俐'},
+    {'title': 'The Pork of Music', 'year': '2012','editor':'刘德伟'},
     {'title': '活着', 'year': '1992','editor':'张艺谋'}
 ]
 
