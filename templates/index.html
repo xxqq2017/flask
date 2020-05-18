@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>{{ name }}'s Watchlist</title>
+    <link rel="icon" href="{{ url_for('static',filename='favicon.ico') }}">
 </head>
 <body>
-
+    <img alt ='img1' src="{{ url_for('static',filename='linux.jpg') }}">
     <h2>{{ name }}'s Watchlist</h2>
     {# 使用 length 过滤器获取 movies 变量的长度 #}
     <p>{{ movies|length }} Titles</p>
@@ -14,6 +15,7 @@
         <li>{{ movie.title }} - {{ movie.year }} -- {{ movie['editor'] }}</li>  {# 等同于 movie['title'] #}
         {% endfor %}  {# 使用 endfor 标签结束 for 语句 #}
     </ul>
+    <img alt='img2' src="{{ url_for('static', filename='10.jpg')  }}">
     <footer>
         <small>&copy; 2020 <a href="/">HelloFlask</a></small>
     </footer>
