@@ -18,16 +18,17 @@ def server_error(error):
 
 name = 'xiangqing'
 movies = [
-    {'title': 'My Neighbor Totoro', 'year': '1988'},
-    {'title': 'Dead Poets Society', 'year': '1989'},
-    {'title': 'A Perfect World', 'year': '1993'},
-    {'title': 'Leon', 'year': '1994'},
-    {'title': 'Mahjong', 'year': '1996'},
-    {'title': 'Swallowtail Butterfly', 'year': '1996'},
-    {'title': 'King of Comedy', 'year': '1999'},
-    {'title': 'Devils on the Doorstep', 'year': '1999'},
-    {'title': 'WALL-E', 'year': '2008'},
-    {'title': 'The Pork of Music', 'year': '2012'},
+    {'title': 'My Neighbor Totoro', 'year': '1988','editor':'jhon wang'},
+    {'title': 'Dead Poets Society', 'year': '1989','editor':'jhon wang2'},
+    {'title': 'A Perfect World', 'year': '1993','editor':'jhon wang2'},
+    {'title': 'Leon', 'year': '1994','editor':'mark'},
+    {'title': 'Mahjong', 'year': '1996','editor':'stphone'},
+    {'title': 'Swallowtail Butterfly', 'year': '1996','editor':'ptell'},
+    {'title': 'King of Comedy', 'year': '1999','editor':'xiangm'},
+    {'title': 'Devils on the Doorstep', 'year': '1999','editor':'huaqiang'},
+    {'title': 'WALL-E', 'year': '2008','editor':'liujing'},
+    {'title': 'The Pork of Music', 'year': '2012','editor':'张艺'},
+    {'title': '活着', 'year': '1992','editor':'张艺谋'}
 ]
 
 if __name__ == '__main__':
