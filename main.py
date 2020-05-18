@@ -8,9 +8,6 @@ app=Flask(__name__)
 app.config['SECRET_KEY']='nihao'
 bootstrap = Bootstrap(app)
 
-class indexForm(Form):
-    name = StringField("请输入你的名字:",validators=[DataRequired()])
-    submit = SubmitField("提交",)
 
 @app.route('/')
 def index():
