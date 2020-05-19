@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy #数据库类导入
 import os, sys
+import pymysql
+
 
 WIN = sys.platform.startswith('win')
 if WIN:  # 如果是 Windows 系统，使用三个斜线
@@ -14,21 +16,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'da
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 关闭对模型修改的监控
 db = SQLAlchemy(app) # 初始化扩展，传入程序实例 app
 
-
-class User(db.Model):  # 表名将会是 user（自动生成，小写处理）
-    id = db.Column(db.Integer, primary_key=True)  # 主键
-    name = db.Column(db.String(20))  # 名字
-
-
-class Movie(db.Model):  # 表名将会是 movie
-    id = db.Column(db.Integer, primary_key=True)  # 主键
-    title = db.Column(db.String(60))  # 电影标题
-    year = db.Column(db.String(4))  # 电影年份
-
-
 @app.route('/')
 def index():
-    return render_template('index.html',movies=movies)
+    conn = pymysql.connect(host='43.255.231.253', user='root',
+                           password='2468QAZwsx@', db='liutuwang',
+                           charset='utf8')
+    cur = conn.cursor()
+    sql = "SELECT username,email,user_pass FROM cdb_user where email != '' limit 100"
+    cur.execute(sql)
+    u = cur.fetchall()
+    conn.close()
+    return render_template('index.html',movies=u)
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -40,27 +38,19 @@ def server_error(error):
 
 @app.context_processor
 def t_context():
-    #return dict(name=name)
-    return dict(name=names['name'])
+    conn = pymysql.connect(host='43.255.231.253', user='root',
+                           password='2468QAZwsx@', db='liutuwang',
+                           charset='utf8')
+    cur = conn.cursor()
+    sql = "SELECT username FROM cdb_user where email != '' limit 1"
+    cur.execute(sql)
+    names = cur.fetchone()
+    conn.close()
+    return dict(name=names[0])
 
 #name = 'xiangqing'
 names={'name':'xiangqing'}
 
-print(names['name'])
-
-movies = [
-    {'title': 'My Neighbor Totoro', 'year': '1988','editor':'jhon wang'},
-    {'title': 'Dead Poets Society', 'year': '1989','editor':'jhon wang2'},
-    {'title': 'A Perfect World', 'year': '1993','editor':'jhon wang2'},
-    {'title': 'Leon', 'year': '1994','editor':'mark'},
-    {'title': 'Mahjong', 'year': '1996','editor':'stphone'},
-    {'title': 'Swallowtail Butterfly', 'year': '1996','editor':'ptell'},
-    {'title': 'King of Comedy', 'year': '1999','editor':'xiangm'},
-    {'title': 'Devils on the Doorstep', 'year': '1999','editor':'huaqiang'},
-    {'title': 'WALL-E', 'year': '2008','editor':'巩俐'},
-    {'title': 'The Pork of Music', 'year': '2012','editor':'刘德伟'},
-    {'title': '活着', 'year': '1992','editor':'张艺谋'}
-]
 
 if __name__ == '__main__':
     app.run(host='192.168.50.222',port=80, debug=True)
