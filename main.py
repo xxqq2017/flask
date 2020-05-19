@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy #数据库类导入
 import os, sys
 
@@ -28,7 +28,7 @@ class Movie(db.Model):  # 表名将会是 movie
 
 @app.route('/')
 def index():
-    return render_template('index.html',name=name,movies=movies)
+    return render_template('index.html',movies=movies)
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -38,7 +38,16 @@ def page_not_found(error):
 def server_error(error):
     return render_template('500.html'), 500
 
-name = 'xiangqing'
+@app.context_processor
+def t_context():
+    #return dict(name=name)
+    return dict(name=names['name'])
+
+#name = 'xiangqing'
+names={'name':'xiangqing'}
+
+print(names['name'])
+
 movies = [
     {'title': 'My Neighbor Totoro', 'year': '1988','editor':'jhon wang'},
     {'title': 'Dead Poets Society', 'year': '1989','editor':'jhon wang2'},
