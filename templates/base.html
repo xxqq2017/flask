@@ -4,7 +4,7 @@
     {% block head %}
     <meta charset="utf-8">
     <meta name="viewsport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }}'s Watchlist</title>
+    <title>{{ user.name }}'s Watchlist</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
     {% endblock %}
@@ -16,7 +16,7 @@
     {% endfor %}
     <h2>
         <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='imgs/linux.jpg') }}">
-        {{ name }}'s Watchlist
+        {{ user.name }}'s Watchlist
     </h2>
     <nav>
         <ul>
@@ -28,7 +28,7 @@
     {% block content %}{% endblock %}
     {% block footer %}
     <footer>
-        <small>&copy; 2020 <a href="{{ url_for('index') }}">HelloFlask</a></small>
+        <small>&copy; 2020 <a href="{{ url_for('index') }}">首页</a></small>
     </footer>
     {% endblock %}
 </body>

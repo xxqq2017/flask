@@ -3,19 +3,19 @@
 {% block content %}
 <p>{{ movies|length }} Titles</p>
 <form method="post">
-    id   <input type="text" name="id"    autocomplete="off" required>
+
     Name <input type="text" name="title" autocomplete="off" required>
     Year <input type="text" name="year"  autocomplete="off" required>
     <input class="btn" type="submit" name="submit" value="Add">
 </form>
 <ul class="movie-list">
     {% for movie in movies %}  {# 迭代 movies 变量 #}
-    <li>{{ movie[0] }} - {{ movie[1] }} -- {{ movie[2] }}
+    <li>{{ movie.id }} - {{ movie.title }} -- {{ movie.year }}
         <span class="float-right">
             <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie[0]) }}">
-                <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
-            <a class="btn" href="{{ url_for('edit', movie_id=movie[0]) }}">Edit</a>
-            <a class="imdb" href="https://www.imdb.com/find?q={{ movie[1] }}" target="_blank" title="Find this movie on IMDb">IMDb</a>
+                <a class="btn" href="{{ url_for('delete', movie_id=movie.id) }}">Delete</a>
+                <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
+                <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb">IMDb</a>
             </form>
         </span>
     </li>  {# 等同于 movie['title'] #}
