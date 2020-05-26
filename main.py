@@ -25,7 +25,14 @@ class Movie(db.Model):  # 表名将会是 movie
 @app.route('/', methods=['GET', 'POST'])
 def index():
     user = User.query.first()
-    movies = Movie.query.all()
+    #movies = Movie.query.all()
+    # 传递的页码数量
+    page = int(request.args.get('page') or 1)
+    per_page = 5  # 每页数量
+    #pagination = Movie.query.paginate(page, per_page, error_out=False) # 创建分页器对象
+
+    pagination = Movie.query.order_by(Movie.id.desc()).paginate(page, per_page, error_out=False)
+    movies = pagination.items
     if request.method == 'POST':  # 判断是否是 POST 请求
         # 获取表单数据
         #id = request.form.get('id')
@@ -41,8 +48,7 @@ def index():
         db.session.commit()
         flash('Item created.')  # 显示成功创建的提示
         return redirect(url_for('index'))
-    return render_template('index.html', movies=movies, user=user)
-
+    return render_template('index.html', movies=movies, user=user,pagination=pagination)
 
 @app.route('/movie/edit/<int:movie_id>', methods=['GET', 'POST'])
 def edit(movie_id):
@@ -97,21 +103,6 @@ def page_not_found(error):
 @app.errorhandler(500)
 def server_error(error):
     return render_template('500.html'), 500
-
-@app.context_processor
-def t_context():
-    conn = pymysql.connect(host='43.255.231.253', user='root',
-                           password='2468QAZwsx@', db='test',
-                           charset='utf8')
-    cur = conn.cursor()
-    sql = "SELECT * FROM user"
-    cur.execute(sql)
-    names = cur.fetchone()
-    conn.close()
-    return dict(name=names[1])
-
-# #name = 'xiangqing'
-# names={'name':'xiangqing'}
 
 
 if __name__ == '__main__':
