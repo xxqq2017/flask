@@ -1,66 +1,23 @@
-from flask import Flask, render_template, request, flash, redirect,url_for
-import os, sys, pymysql,time
-from flask_login import LoginManager,login_user,logout_user,login_required,UserMixin,current_user
-from flask_sqlalchemy import SQLAlchemy #数据库类导入
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import render_template, request, flash, redirect,url_for, Blueprint
+from flask_login import login_user,logout_user,login_required,current_user
+from .models import User, Movie
+from myapp import app,db
 
-
-app=Flask(__name__)
-app.config['SECRET_KEY']='nihao'
-# app.config['SECRET_KEY'] = 'dev'  # 等同于 app.secret_key = 'dev'
-#app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:2468QAZwsx@@43.255.231.253:3306/test?charset=utf8'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 关闭对模型修改的监控
-db = SQLAlchemy(app) # 初始化扩展，传入程序实例 app
-login_manager = LoginManager(app)  # 实例化扩展类
-
-
-@login_manager.user_loader
-def load_user(user_id):  # 创建用户加载回调函数，接受用户 ID 作为参数
-    user = User.query.get(int(user_id))  # 用 ID 作为 User 模型的主键查询对应的用户
-    return user  # 返回用户对象
-
-
-class User(db.Model,UserMixin):  # 表名将会是 user（自动生成，小写处理）
-    __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)  # 主键
-    name = db.Column(db.String(20),unique=True,index=True)  # 名字 admin -> 12345
-    username = db.Column(db.String(10))
-    passwd_hash = db.Column(db.String(128))
-    email = db.Column(db.String(128),unique=True)
-    addr = db.Column(db.String(128))
-
-
-    def set_password(self,passwd):
-        self.passwd_hash = generate_password_hash(passwd)
-
-    def vary_password(self,passwd):
-        return check_password_hash(self.passwd_hash,passwd)
-
-class Movie(db.Model):  # 表名将会是 movie
-    __tablename__ = 'movie'
-    id = db.Column(db.Integer, primary_key=True)  # 主键
-    title = db.Column(db.String(60))  # 电影标题
-    year = db.Column(db.String(4))  # 电影年份
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-
         if not username or not password :
             flash('Invalid input.')
             return redirect(url_for('login'))
-
         user = User.query.first()
         # 验证用户名和密码是否一致
         if username == user.username and user.vary_password(password):
             login_user(user)  # 登入用户
             flash('Login success.')
             return redirect(url_for('index'))  # 重定向到主页
-
         flash('Invalid username or password.')  # 如果验证失败，显示错误消息
         return redirect(url_for('login'))  # 重定向回登录页面
 
@@ -207,15 +164,3 @@ def upload():
         flash('file uploaded successfully')
         return render_template('upload.html')
     return render_template('upload.html',user=user)
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
-
-@app.errorhandler(500)
-def server_error(error):
-    return render_template('500.html'), 500
-
-
-if __name__ == '__main__':
-    app.run(host='192.168.50.222',port=80, debug=True)
