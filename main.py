@@ -29,12 +29,12 @@ class User(db.Model,UserMixin):  # 表名将会是 user（自动生成，小写�
     passwd_hash = db.Column(db.String(128))
     email = db.Column(db.String(128),unique=True)
     addr = db.Column(db.String(128))
-    birthday = db.Column(db.Date,default =time.strftime('%Y-%m-%d'))
 
-    def set_passwd(self,passwd):
+
+    def set_password(self,passwd):
         self.passwd_hash = generate_password_hash(passwd)
 
-    def vary_passwd(self,passwd):
+    def vary_password(self,passwd):
         return check_password_hash(self.passwd_hash,passwd)
 
 class Movie(db.Model):  # 表名将会是 movie
@@ -50,13 +50,13 @@ def login():
         password = request.form['password']
 
 
-        if not username or not password:
+        if not username or not password :
             flash('Invalid input.')
             return redirect(url_for('login'))
 
         user = User.query.first()
         # 验证用户名和密码是否一致
-        if username == user.username and user.vary_passwd(password):
+        if username == user.username and user.vary_password(password):
             login_user(user)  # 登入用户
             flash('Login success.')
             return redirect(url_for('index'))  # 重定向到主页
@@ -70,24 +70,31 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
-
-
-        if not username or not password:
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+        email = request.form['email']
+        addr = request.form['addr']
+        if not username or not password1 or not password2:
             flash('Invalid input.')
-            return redirect(url_for('login'))
+            return redirect(url_for('register'))
+        if password1 != password2:
+            flash('passwd is not match!.')
+            return redirect(url_for('register'))
 
-        user = User.query.first()
+        user2 = User.query.filter_by(username='%s'%username).first()
+        email2 =User.query.filter_by(email='%s'%email).first()
+        print(username,user2,email,email2)
+        if user2.username == username or email2.email == email:
+            flash('has exeist!')
+            return redirect(url_for('register'))
         # 验证用户名和密码是否一致
-        if username == user.username and user.vary_passwd(password):
-            login_user(user)  # 登入用户
-            flash('Login success.')
-            return redirect(url_for('index'))  # 重定向到主页
+        User.set_passwd(password1)
 
-        flash('Invalid username or password.')  # 如果验证失败，显示错误消息
-        return redirect(url_for('login'))  # 重定向回登录页面
+        login_user(user)  # 登入用户
+        flash('Register success.')
+        return redirect(url_for('register'))  # 重定向回登录页面
 
-    return render_template('login.html')
+    return render_template('register.html')
 
 @app.route('/logout')
 @login_required  # 用于视图保护，后面会详细介绍
@@ -133,7 +140,6 @@ def settings():
         name = request.form['name']
         email = request.form['email']
         addr = request.form['addr']
-        birthday = request.form['birthday']
 
         if not name or len(name) > 20:
             flash('Invalid input.')
@@ -148,7 +154,6 @@ def settings():
         # user.name = name
         user.email = email
         user.addr = addr
-        user.birthday =birthday
         db.session.commit()
         flash('Settings updated.')
         return redirect(url_for('index'))
