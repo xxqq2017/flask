@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, redirect,url_for, Blueprint
 from flask_login import login_user,logout_user,login_required,current_user
-from .models import User, Movie
+from .models import User, Movie,Guestbook
 from myapp import app,db
 
 
@@ -69,7 +69,7 @@ def index():
     per_page = 5  # 每页数量
     #pagination = Movie.query.paginate(page, per_page, error_out=False) # 创建分页器对象
 
-    pagination = Movie.query.order_by(Movie.id.desc()).paginate(page, per_page, error_out=False)
+    pagination = Movie.query.order_by(Movie.id.asc()).paginate(page, per_page, error_out=False)
     movies = pagination.items
     if request.method == 'POST':  # 判断是否是 POST 请求
         if not current_user.is_authenticated:  # 如果当前用户未认证
@@ -89,6 +89,23 @@ def index():
         flash('Item created.')  # 显示成功创建的提示
         return redirect(url_for('index'))
     return render_template('index.html', movies=movies,pagination=pagination)
+
+@app.route('/guestbook',methods=['POST','GET'])
+def guestbook():
+    if request.method =='POST':
+        name = request.form.get('name')  # 传入表单对应输入字段的 name 值
+        msg= request.form.get('msg')
+        G1 = Guestbook(name=name,msg=msg)
+        db.session.add(G1)
+        db.session.commit()
+        flash(u'留言成功！')
+        return redirect(url_for('guestbook'))
+    page = int(request.args.get('page') or 1)
+    per_page = 5  # 每页数量
+    #pagination = Movie.query.paginate(page, per_page, error_out=False) # 创建分页器对象
+    pagination = Guestbook.query.order_by(Guestbook.c_time.asc()).paginate(page, per_page, error_out=False)
+    msgs = Guestbook.query.all()
+    return render_template('guestbook.html', msgs=msgs)
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required

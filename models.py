@@ -1,6 +1,7 @@
 from flask_login import login_user,logout_user,login_required,UserMixin
 from myapp import db
 from werkzeug.security import generate_password_hash, check_password_hash
+import time
 
 class User(db.Model,UserMixin):  # 表名将会是 user（自动生成，小写处理）
     __tablename__ = 'user'
@@ -23,3 +24,10 @@ class Movie(db.Model):  # 表名将会是 movie
     id = db.Column(db.Integer, primary_key=True)  # 主键
     title = db.Column(db.String(60))  # 电影标题
     year = db.Column(db.String(4))  # 电影年份
+
+class Guestbook(db.Model):  # 表名将会是 movie
+    __tablename__ = 'guestbook'
+    id = db.Column(db.Integer, primary_key=True,auto_increment=True)  # 主键
+    name = db.Column(db.String(60))
+    msg = db.Column(db.String(100))
+    c_time = db.Column(db.DateTime,default='2020-01-01 00:00:00')

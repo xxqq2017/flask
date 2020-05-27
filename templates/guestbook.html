@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>GuestBook</h3>
+<form method="post">
+    大名:<input type="text" name="name"  autocomplete="off" required><br><br>
+    留言:<input type="text" name="msg"  autocomplete="off" required><br><br>
+    <input class="btn" type="submit" name="submit" value="留言">
+</form>
+<ul class="movie-list">
+ {% for msg in msgs %}
+    <li>第{{ msg.id }}楼:--{{ msg.msg }}--
+        ____{{ msg.name }}留言道.__{{ msg.c_time }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
