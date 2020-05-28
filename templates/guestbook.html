@@ -9,9 +9,8 @@
 </form>
 <ul class="movie-list">
  {% for msg in msgs %}
-    <li>第{{ msg.id }}楼:--{{ msg.msg }}--
-        ____{{ msg.name }}留言道.__{{ msg.c_time }}</li>
+    <li>第{{ msg.id }}楼<h1>{{ msg.msg }}</h1>
+        用户：&nbsp;&nbsp;{{ msg.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg.c_time }}</li>
 {% endfor %}
 </ul>
-
 {% endblock %}

@@ -103,8 +103,9 @@ def guestbook():
     page = int(request.args.get('page') or 1)
     per_page = 5  # 每页数量
     #pagination = Movie.query.paginate(page, per_page, error_out=False) # 创建分页器对象
-    pagination = Guestbook.query.order_by(Guestbook.c_time.asc()).paginate(page, per_page, error_out=False)
-    msgs = Guestbook.query.all()
+    pagination = Guestbook.query.order_by(Guestbook.c_time.desc()).paginate(page, per_page, error_out=False)
+    #msgs = Guestbook.query.all()
+    msgs = pagination.items
     return render_template('guestbook.html', msgs=msgs)
 
 @app.route('/settings', methods=['GET', 'POST'])
@@ -114,11 +115,9 @@ def settings():
         name = request.form['name']
         email = request.form['email']
         addr = request.form['addr']
-
         if not name or len(name) > 20:
             flash('Invalid input.')
             return redirect(url_for('settings'))
-
         current_user.name = name
         user = User.query.first()
 

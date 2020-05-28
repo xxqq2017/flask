@@ -1,7 +1,7 @@
 from flask_login import login_user,logout_user,login_required,UserMixin
 from myapp import db
 from werkzeug.security import generate_password_hash, check_password_hash
-import time
+import datetime
 
 class User(db.Model,UserMixin):  # 表名将会是 user（自动生成，小写处理）
     __tablename__ = 'user'
@@ -30,4 +30,4 @@ class Guestbook(db.Model):  # 表名将会是 movie
     id = db.Column(db.Integer, primary_key=True,auto_increment=True)  # 主键
     name = db.Column(db.String(60))
     msg = db.Column(db.String(100))
-    c_time = db.Column(db.DateTime,default='2020-01-01 00:00:00')
+    c_time = db.Column(db.DateTime,default=datetime.datetime.now)
