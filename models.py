@@ -31,3 +31,9 @@ class Guestbook(db.Model):  # 表名将会是 movie
     name = db.Column(db.String(60))
     msg = db.Column(db.String(100))
     c_time = db.Column(db.DateTime,default=datetime.datetime.now)
+    r_ip =db.Column(db.String(20))
+
+class Test(db.Model):  # 表名将会是 movie
+    __tablename__ = 'test'
+    id = db.Column(db.Integer, primary_key=True,auto_increment=True)  # 主键
+    name = db.Column(db.String(60))

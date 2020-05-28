@@ -10,7 +10,11 @@
 <ul class="movie-list">
  {% for msg in msgs %}
     <li>第{{ msg.id }}楼<h1>{{ msg.msg }}</h1>
-        用户：&nbsp;&nbsp;{{ msg.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg.c_time }}</li>
+        用户：&nbsp;&nbsp;{{ msg.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg.c_time }}&nbsp;&nbsp;
+        IP :{% if msg.r_ip %} {{ msg.r_ip }}
+            {% else %} 未知
+            {% endif %}
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

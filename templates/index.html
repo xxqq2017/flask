@@ -12,6 +12,8 @@
     <input class="btn" type="submit" name="submit" value="Add">
 </form>
 {% endif %}
+
+
 <ul class="movie-list">
     {% for movie in movies %}  {# 迭代 movies 变量 #}
     <li>{{ movie.id }} - {{ movie.title }} -- {{ movie.year }}

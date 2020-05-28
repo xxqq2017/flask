@@ -95,7 +95,8 @@ def guestbook():
     if request.method =='POST':
         name = request.form.get('name')  # 传入表单对应输入字段的 name 值
         msg= request.form.get('msg')
-        G1 = Guestbook(name=name,msg=msg)
+        r_ip = request.remote_addr
+        G1 = Guestbook(name=name,msg=msg,r_ip=r_ip)
         db.session.add(G1)
         db.session.commit()
         flash(u'留言成功！')
