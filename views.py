@@ -2,6 +2,9 @@ from flask import render_template, request, flash, redirect,url_for, Blueprint
 from flask_login import login_user,logout_user,login_required,current_user
 from .models import User, Movie,Guestbook
 from myapp import app,db
+from wtforms import StringField,SubmitField,PasswordField
+from wtforms.validators import  Required
+from flask_wtf import FlaskForm
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -102,12 +105,12 @@ def guestbook():
         flash(u'留言成功！')
         return redirect(url_for('guestbook'))
     page = int(request.args.get('page') or 1)
-    per_page = 5  # 每页数量
+    per_page = 3  # 每页数量
     #pagination = Movie.query.paginate(page, per_page, error_out=False) # 创建分页器对象
     pagination = Guestbook.query.order_by(Guestbook.c_time.desc()).paginate(page, per_page, error_out=False)
     #msgs = Guestbook.query.all()
     msgs = pagination.items
-    return render_template('guestbook.html', msgs=msgs)
+    return render_template('guestbook.html', msgs=msgs,pagination=pagination)
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required

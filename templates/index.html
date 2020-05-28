@@ -3,10 +3,9 @@
 
 <!-- 在模板中可以直接使用 current_user 变量 -->
 {% block content %}
-{% if current_user.is_authenticated %}
 <p>观看列表，共查询到：{{ movies|length }}项。</p>
+{% if current_user.is_authenticated %}
 <form method="post">
-
     Name <input type="text" name="title" autocomplete="off" required>
     Year <input type="text" name="year"  autocomplete="off" required>
     <input class="btn" type="submit" name="submit" value="Add">
@@ -35,7 +34,6 @@
         {{ macros.pagination_widget(pagination, 'index') }}
     </div>
 {% endif %}
-
 
 <img alt='Walking totoro' class="totoro" src="{{ url_for('static', filename='imgs/10.jpg')  }}" title="to~to~ro~">
 {% endblock %}

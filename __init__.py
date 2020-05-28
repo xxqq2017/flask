@@ -31,9 +31,5 @@ from myapp.views import app
 from myapp.errors import app
 
 
-
-
-
-
 if __name__ == '__main__':
     app.run(host='192.168.50.222',port=80, debug=True)

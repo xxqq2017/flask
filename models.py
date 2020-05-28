@@ -11,7 +11,7 @@ class User(db.Model,UserMixin):  # 表名将会是 user（自动生成，小写�
     passwd_hash = db.Column(db.String(128))
     email = db.Column(db.String(128),unique=True)
     addr = db.Column(db.String(128))
-
+    r_time = db.Column(db.DateTime,default=datetime.datetime.now)
 
     def set_password(self,passwd):
         self.passwd_hash = generate_password_hash(passwd)
@@ -37,3 +37,5 @@ class Test(db.Model):  # 表名将会是 movie
     __tablename__ = 'test'
     id = db.Column(db.Integer, primary_key=True,auto_increment=True)  # 主键
     name = db.Column(db.String(60))
+    c_time = db.Column(db.DateTime,default=datetime.datetime.now)
+
